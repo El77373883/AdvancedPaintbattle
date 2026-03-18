@@ -34,6 +34,8 @@ public class AdvancedPaintBattle extends JavaPlugin {
     private EventManager eventManager;
     private DiscordManager discordManager;
     private ModeManager modeManager;
+    private AdminLogger adminLogger;
+    private ReportManager reportManager;
 
     // UTILS
     private FileUtil fileUtil;
@@ -80,6 +82,8 @@ public class AdvancedPaintBattle extends JavaPlugin {
     private void loadManagers() {
         this.fileUtil = new FileUtil(this);
         this.configManager = new ConfigManager(this);
+        this.adminLogger = new AdminLogger(this);
+        this.reportManager = new ReportManager(this);
         this.databaseManager = new DatabaseManager(this);
         this.mySQLManager = new MySQLManager(this);
         this.messageManager = new MessageManager(this);
@@ -160,6 +164,8 @@ public class AdvancedPaintBattle extends JavaPlugin {
     public EventManager getEventManager() { return eventManager; }
     public DiscordManager getDiscordManager() { return discordManager; }
     public ModeManager getModeManager() { return modeManager; }
+    public AdminLogger getAdminLogger() { return adminLogger; }
+    public ReportManager getReportManager() { return reportManager; }
     public FileUtil getFileUtil() { return fileUtil; }
     public UpdateChecker getUpdateChecker() { return updateChecker; }
     public BungeeCordHook getBungeeCordHook() { return bungeeCordHook; }
