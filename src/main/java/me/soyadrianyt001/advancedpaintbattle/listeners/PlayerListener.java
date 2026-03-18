@@ -31,13 +31,14 @@ public class PlayerListener implements Listener {
         // Mensaje de bienvenida
         plugin.getMessageManager().sendRaw(player, "welcome", "%player%", player.getName());
 
-        // Notificar update si es admin
+        // Notificar si es admin
         if (player.hasPermission("advancedpaintbattle.admin")) {
             int pending = plugin.getReportManager().getPendingCount();
             if (pending > 0) {
-                player.sendMessage("§c§l⚠ §eTienes §c" + pending + " §ereportes pendientes. Usa §e/apb report list");
+                player.sendMessage("§c§l⚠ §eTienes §c" + pending +
+                        " §ereportes pendientes. Usa §e/apb report list");
             }
-            plugin.getAdminLogger().log("Admin " + player.getName() + " se conecto al servidor.");
+            plugin.getAdminLogger().log("Admin " + player.getName() + " se conecto.");
         }
 
         // Particulas de bienvenida
@@ -48,4 +49,17 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
-        Player player = e​​​​​​​​​​​​​​​​
+        Player player = e.getPlayer();
+
+        // Guardar datos
+        plugin.getPlayerDataManager().savePlayer(player);
+
+        // Salir de arena si estaba en juego
+        if (plugin.getGameManager().isInGame(player.getUniqueId())) {
+            plugin.getGameManager().leaveArena(player);
+        }
+
+        // Limpiar violations del anticheat
+        plugin.getAntiCheatListener().clearViolations(player.getUniqueId());
+    }
+}
