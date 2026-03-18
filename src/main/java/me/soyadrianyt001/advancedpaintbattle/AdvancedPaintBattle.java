@@ -26,6 +26,7 @@ public class AdvancedPaintBattle extends JavaPlugin {
     private UpdateChecker updateChecker;
     private AnnouncementManager announcementManager;
     private EventManager eventManager;
+    private DiscordManager discordManager;
 
     @Override
     public void onEnable() {
@@ -33,7 +34,6 @@ public class AdvancedPaintBattle extends JavaPlugin {
         saveDefaultConfig();
 
         printBanner();
-
         loadManagers();
         registerListeners();
         registerCommands();
@@ -80,6 +80,7 @@ public class AdvancedPaintBattle extends JavaPlugin {
         this.friendManager = new FriendManager(this);
         this.announcementManager = new AnnouncementManager(this);
         this.eventManager = new EventManager(this);
+        this.discordManager = new DiscordManager(this);
     }
 
     private void registerListeners() {
@@ -92,18 +93,19 @@ public class AdvancedPaintBattle extends JavaPlugin {
     }
 
     private void registerCommands() {
-        getCommand("apb").setExecutor(new APBCommand(this));
-        getCommand("apb").setTabCompleter(new APBCommand(this));
+        APBCommand cmd = new APBCommand(this);
+        getCommand("apb").setExecutor(cmd);
+        getCommand("apb").setTabCompleter(cmd);
     }
 
     private void setupSoftDepends() {
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new PlaceholderHook(this).register();
-            getLogger().info("PlaceholderAPI conectado.");
+            getLogger().info("[APB] PlaceholderAPI conectado.");
         }
         if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
             VaultHook.setup();
-            getLogger().info("Vault conectado.");
+            getLogger().info("[APB] Vault conectado.");
         }
     }
 
@@ -123,4 +125,5 @@ public class AdvancedPaintBattle extends JavaPlugin {
     public MessageManager getMessageManager() { return messageManager; }
     public AnnouncementManager getAnnouncementManager() { return announcementManager; }
     public EventManager getEventManager() { return eventManager; }
+    public DiscordManager getDiscordManager() { return discordManager; }
 }
