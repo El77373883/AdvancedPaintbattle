@@ -1,0 +1,32 @@
+name: AdvancedPaintBattle
+version: '1.0.0'
+main: me.soyadrianyt001.advancedpaintbattle.AdvancedPaintBattle
+api-version: '1.21'
+authors: [soyadrianyt001]
+description: The Most Advanced Paint Battle Plugin Ever Created
+
+softdepend:
+  - PlaceholderAPI
+  - Vault
+  - WorldGuard
+
+commands:
+  apb:
+    description: Comando principal de AdvancedPaintBattle
+    aliases: [pb, paint]
+    usage: /apb <comando>
+    permission: advancedpaintbattle.use
+
+permissions:
+  advancedpaintbattle.use:
+    description: Acceso basico
+    default: true
+  advancedpaintbattle.admin:
+    description: Acceso admin
+    default: op
+  advancedpaintbattle.bypass:
+    description: Salta verificaciones
+    default: false
+  advancedpaintbattle.vip:
+    description: Acceso VIP
+    default: false
