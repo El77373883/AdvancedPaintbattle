@@ -10,6 +10,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class AdvancedPaintBattle extends JavaPlugin {
 
     private static AdvancedPaintBattle instance;
+
+    // MANAGERS
+    private ConfigManager configManager;
+    private DataManager dataManager;
+    private PlayerDataManager playerDataManager;
+    private DatabaseManager databaseManager;
+    private MessageManager messageManager;
     private ArenaManager arenaManager;
     private GameManager gameManager;
     private StatsManager statsManager;
@@ -21,12 +28,13 @@ public class AdvancedPaintBattle extends JavaPlugin {
     private BattlePassManager battlePassManager;
     private GalleryManager galleryManager;
     private FriendManager friendManager;
-    private DatabaseManager databaseManager;
-    private MessageManager messageManager;
-    private UpdateChecker updateChecker;
     private AnnouncementManager announcementManager;
     private EventManager eventManager;
     private DiscordManager discordManager;
+
+    // UTILS
+    private FileUtil fileUtil;
+    private UpdateChecker updateChecker;
 
     @Override
     public void onEnable() {
@@ -45,15 +53,15 @@ public class AdvancedPaintBattle extends JavaPlugin {
         announcementManager.startAnnouncing();
         eventManager.checkSpecialEvents();
 
-        getLogger().info("AdvancedPaintBattle habilitado correctamente.");
+        getLogger().info("[APB] AdvancedPaintBattle habilitado correctamente.");
     }
 
     @Override
     public void onDisable() {
         if (gameManager != null) gameManager.stopAllGames();
-        if (statsManager != null) statsManager.saveAll();
+        if (dataManager != null) dataManager.saveAll();
         if (databaseManager != null) databaseManager.close();
-        getLogger().info("AdvancedPaintBattle deshabilitado.");
+        getLogger().info("[APB] AdvancedPaintBattle deshabilitado. Datos guardados.");
     }
 
     private void printBanner() {
@@ -65,14 +73,29 @@ public class AdvancedPaintBattle extends JavaPlugin {
     }
 
     private void loadManagers() {
+        // Utils primero
+        this.fileUtil = new FileUtil(this);
+
+        // Config y datos base
+        this.configManager = new ConfigManager(this);
         this.databaseManager = new DatabaseManager(this);
         this.messageManager = new MessageManager(this);
+
+        // Datos de jugadores
+        this.playerDataManager = new PlayerDataManager(this);
+        this.dataManager = new DataManager(this);
+
+        // Stats y economia
         this.statsManager = new StatsManager(this);
         this.coinManager = new CoinManager(this);
         this.rankManager = new RankManager(this);
         this.achievementManager = new AchievementManager(this);
+
+        // Juego
         this.arenaManager = new ArenaManager(this);
         this.gameManager = new GameManager(this);
+
+        // Extra
         this.tournamentManager = new TournamentManager(this);
         this.missionManager = new MissionManager(this);
         this.battlePassManager = new BattlePassManager(this);
@@ -90,6 +113,7 @@ public class AdvancedPaintBattle extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PaintListener(this), this);
         Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);
         Bukkit.getPluginManager().registerEvents(new AntiCheatListener(this), this);
+        new ChatUtil(this); // Se registra solo internamente
     }
 
     private void registerCommands() {
@@ -107,9 +131,22 @@ public class AdvancedPaintBattle extends JavaPlugin {
             VaultHook.setup();
             getLogger().info("[APB] Vault conectado.");
         }
+        if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
+            getLogger().info("[APB] WorldGuard detectado.");
+        }
+        if (getConfig().getBoolean("bungeecord.enabled", false)) {
+            getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+            getLogger().info("[APB] BungeeCord conectado.");
+        }
     }
 
+    // ─── GETTERS ───────────────────────────────────────────────
     public static AdvancedPaintBattle getInstance() { return instance; }
+    public ConfigManager getConfigManager() { return configManager; }
+    public DataManager getDataManager() { return dataManager; }
+    public PlayerDataManager getPlayerDataManager() { return playerDataManager; }
+    public DatabaseManager getDatabaseManager() { return databaseManager; }
+    public MessageManager getMessageManager() { return messageManager; }
     public ArenaManager getArenaManager() { return arenaManager; }
     public GameManager getGameManager() { return gameManager; }
     public StatsManager getStatsManager() { return statsManager; }
@@ -121,9 +158,9 @@ public class AdvancedPaintBattle extends JavaPlugin {
     public BattlePassManager getBattlePassManager() { return battlePassManager; }
     public GalleryManager getGalleryManager() { return galleryManager; }
     public FriendManager getFriendManager() { return friendManager; }
-    public DatabaseManager getDatabaseManager() { return databaseManager; }
-    public MessageManager getMessageManager() { return messageManager; }
     public AnnouncementManager getAnnouncementManager() { return announcementManager; }
     public EventManager getEventManager() { return eventManager; }
     public DiscordManager getDiscordManager() { return discordManager; }
+    public FileUtil getFileUtil() { return fileUtil; }
+    public UpdateChecker getUpdateChecker() { return updateChecker; }
 }
