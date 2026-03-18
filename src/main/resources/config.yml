@@ -1,0 +1,219 @@
+# ╔══════════════════════════════════════════════╗
+# ║       AdvancedPaintBattle - Config v1.0      ║
+# ║           by soyadrianyt001                  ║
+# ╚══════════════════════════════════════════════╝
+
+# --- ACTUALIZACIONES ---
+update-checker:
+  enabled: true
+  notify-admins: true
+
+# --- TIEMPOS ---
+lobby-countdown: 30
+paint-time: 90
+vote-time: 25
+podium-time: 10
+announce-interval: 300
+
+# --- JUGADORES ---
+min-players: 2
+max-players: 8
+rounds: 3
+
+# --- LIENZO ---
+canvas-size: 16
+canvas-spacing: 6
+canvas-floor: WHITE_CONCRETE
+canvas-border: GRAY_CONCRETE
+
+# --- PUNTOS ---
+points-first: 300
+points-second: 200
+points-third: 100
+points-vote-received: 50
+points-voted: 10
+
+# --- RANGOS ---
+ranks:
+  aprendiz:
+    name: "§7Aprendiz"
+    min-points: 0
+    icon: WOODEN_SWORD
+  artista:
+    name: "§aArtista"
+    min-points: 1000
+    icon: IRON_SWORD
+  maestro:
+    name: "§bMaestro"
+    min-points: 5000
+    icon: DIAMOND_SWORD
+  leyenda:
+    name: "§6§lLeyenda"
+    min-points: 15000
+    icon: NETHERITE_SWORD
+
+# --- MONEDAS ---
+coins-win: 100
+coins-second: 60
+coins-third: 30
+coins-participate: 10
+coins-vote: 5
+
+# --- MYSQL ---
+mysql:
+  enabled: false
+  host: localhost
+  port: 3306
+  database: advancedpaintbattle
+  username: root
+  password: password
+  table-prefix: apb_
+
+# --- DISCORD WEBHOOK ---
+discord:
+  enabled: false
+  webhook-url: ''
+  announce-winners: true
+  announce-tournaments: true
+
+# --- VAULT ---
+vault:
+  enabled: false
+  reward-first: 1000
+  reward-second: 500
+  reward-third: 250
+
+# --- WORLDGUARD ---
+worldguard:
+  enabled: false
+  respect-regions: true
+
+# --- BUNGEECORD ---
+bungeecord:
+  enabled: false
+
+# --- IDIOMA ---
+language: es
+
+# --- EFECTOS ---
+effects:
+  fireworks: true
+  particles: true
+  sounds: true
+  titles: true
+
+# --- EVENTOS ESPECIALES ---
+events:
+  halloween:
+    enabled: true
+    month: 10
+  christmas:
+    enabled: true
+    month: 12
+  new-year:
+    enabled: true
+    month: 1
+    day: 1
+
+# --- ANUNCIOS ---
+announcements:
+  enabled: true
+  interval: 300
+
+# --- TEMAS ---
+themes:
+  animales:
+    - Gato
+    - Perro
+    - Elefante
+    - Delfin
+    - Aguila
+    - Tortuga
+    - Leon
+    - Pinguino
+    - Jirafa
+    - Cocodrilo
+  comida:
+    - Pizza
+    - Hamburguesa
+    - Helado
+    - Taco
+    - Sushi
+    - Pastel
+    - Hot Dog
+    - Dona
+    - Sandwich
+    - Palomitas
+  objetos:
+    - Casa
+    - Carro
+    - Cohete
+    - Barco
+    - Avion
+    - Bicicleta
+    - Reloj
+    - Espada
+    - Corona
+    - Guitarra
+  naturaleza:
+    - Montana
+    - Arcoiris
+    - Volcan
+    - Isla
+    - Tornado
+    - Cascada
+    - Cueva
+    - Desierto
+    - Bosque
+    - Oceano
+  secretos:
+    - '???'
+    - Dimension
+    - Infinito
+    - Cosmos
+  leyenda:
+    - El Universo
+    - La Existencia
+    - El Tiempo
+
+# --- PALETA ---
+palette:
+  - WHITE_CONCRETE
+  - ORANGE_CONCRETE
+  - MAGENTA_CONCRETE
+  - LIGHT_BLUE_CONCRETE
+  - YELLOW_CONCRETE
+  - LIME_CONCRETE
+  - PINK_CONCRETE
+  - GRAY_CONCRETE
+  - LIGHT_GRAY_CONCRETE
+  - CYAN_CONCRETE
+  - PURPLE_CONCRETE
+  - BLUE_CONCRETE
+  - BROWN_CONCRETE
+  - GREEN_CONCRETE
+  - RED_CONCRETE
+  - BLACK_CONCRETE
+  - WHITE_WOOL
+  - ORANGE_WOOL
+  - MAGENTA_WOOL
+  - LIGHT_BLUE_WOOL
+  - YELLOW_WOOL
+  - LIME_WOOL
+  - PINK_WOOL
+  - GRAY_WOOL
+  - CYAN_WOOL
+  - PURPLE_WOOL
+  - BLUE_WOOL
+  - BROWN_WOOL
+  - GREEN_WOOL
+  - RED_WOOL
+  - BLACK_WOOL
+  - GLOWSTONE
+  - GOLD_BLOCK
+  - DIAMOND_BLOCK
+  - EMERALD_BLOCK
+  - IRON_BLOCK
+  - OBSIDIAN
+  - SNOW_BLOCK
+  - ICE
