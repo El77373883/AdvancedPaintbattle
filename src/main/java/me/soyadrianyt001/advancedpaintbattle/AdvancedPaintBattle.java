@@ -37,6 +37,9 @@ public class AdvancedPaintBattle extends JavaPlugin {
     private AdminLogger adminLogger;
     private ReportManager reportManager;
 
+    // LISTENERS
+    private AntiCheatListener antiCheatListener;
+
     // UTILS
     private FileUtil fileUtil;
     private UpdateChecker updateChecker;
@@ -107,12 +110,13 @@ public class AdvancedPaintBattle extends JavaPlugin {
     }
 
     private void registerListeners() {
+        this.antiCheatListener = new AntiCheatListener(this);
         Bukkit.getPluginManager().registerEvents(new GameListener(this), this);
         Bukkit.getPluginManager().registerEvents(new GUIListener(this), this);
         Bukkit.getPluginManager().registerEvents(new LobbyListener(this), this);
         Bukkit.getPluginManager().registerEvents(new PaintListener(this), this);
         Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);
-        Bukkit.getPluginManager().registerEvents(new AntiCheatListener(this), this);
+        Bukkit.getPluginManager().registerEvents(antiCheatListener, this);
         new ChatUtil(this);
     }
 
@@ -166,6 +170,7 @@ public class AdvancedPaintBattle extends JavaPlugin {
     public ModeManager getModeManager() { return modeManager; }
     public AdminLogger getAdminLogger() { return adminLogger; }
     public ReportManager getReportManager() { return reportManager; }
+    public AntiCheatListener getAntiCheatListener() { return antiCheatListener; }
     public FileUtil getFileUtil() { return fileUtil; }
     public UpdateChecker getUpdateChecker() { return updateChecker; }
     public BungeeCordHook getBungeeCordHook() { return bungeeCordHook; }
