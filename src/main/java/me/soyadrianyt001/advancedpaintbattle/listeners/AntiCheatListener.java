@@ -8,10 +8,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.*;
 
@@ -49,7 +48,6 @@ public class AntiCheatListener implements Listener {
         }
         lastCommand.put(uuid, now);
 
-        // Bloquear comandos peligrosos en juego
         String cmd = e.getMessage().toLowerCase();
         String[] blocked = {"/tp", "/teleport", "/fly", "/gamemode", "/gm",
                 "/give", "/item", "/god", "/heal", "/effect"};
@@ -67,8 +65,6 @@ public class AntiCheatListener implements Listener {
         Player player = e.getPlayer();
         if (!plugin.getGameManager().isInGame(player.getUniqueId())) return;
         if (player.hasPermission("advancedpaintbattle.bypass")) return;
-        if (e.getCause() != PlayerTeleportEvent.TeleportCause.PLUGIN &&
-            e.getCause() != PlayerTeleportEvent.TeleportCause.COMMAND) return;
         if (e.getCause() == PlayerTeleportEvent.TeleportCause.ENDER_PEARL ||
             e.getCause() == PlayerTeleportEvent.TeleportCause.CHORUS_FRUIT) {
             e.setCancelled(true);
@@ -107,7 +103,6 @@ public class AntiCheatListener implements Listener {
         if (!(e.getPlayer() instanceof Player player)) return;
         if (!plugin.getGameManager().isInGame(player.getUniqueId())) return;
         String title = e.getView().getTitle();
-        // Solo permitir inventarios del plugin
         if (!title.contains("AdvancedPaintBattle") &&
             !title.contains("Paleta") &&
             !title.contains("Vota") &&
@@ -154,7 +149,6 @@ public class AntiCheatListener implements Listener {
     public void onChat(AsyncPlayerChatEvent e) {
         Player player = e.getPlayer();
         if (!plugin.getGameManager().isInGame(player.getUniqueId())) return;
-        // Anti spam en chat
         String msg = e.getMessage();
         if (msg.length() > 100) {
             e.setCancelled(true);
@@ -174,8 +168,7 @@ public class AntiCheatListener implements Listener {
             violations.remove(uuid);
             kickPlayer(player, type);
         } else if (count >= MAX_VIOLATIONS / 2) {
-            player.sendMessage("§c§l⚠ §cComportamiento sospechoso detectado. (" + count + "/" + MAX_VIOLATIONS + ")");
-            // Notificar admins
+            player.sendMessage("§c§l⚠ §cComportamiento sospechoso. (" + count + "/" + MAX_VIOLATIONS + ")");
             Bukkit.getOnlinePlayers().stream()
                     .filter(p -> p.hasPermission("advancedpaintbattle.admin"))
                     .forEach(admin -> admin.sendMessage(
@@ -188,12 +181,11 @@ public class AntiCheatListener implements Listener {
         String arenaName = plugin.getGameManager().getPlayerArena(player.getUniqueId());
         if (arenaName != null) plugin.getGameManager().leaveArena(player);
 
-        Bukkit.getScheduler().runTask(plugin, () -> {
-            player.kickPlayer("§6§lAdvancedPaintBattle\n\n§cFuiste expulsado por comportamiento sospechoso.\n§7Tipo: §c" + reason);
-        });
+        Bukkit.getScheduler().runTask(plugin, () ->
+            player.kickPlayer("§6§lAdvancedPaintBattle\n\n§cExpulsado por comportamiento sospechoso.\n§7Tipo: §c" + reason));
 
         plugin.getLogger().warning("[APB-ANTICHEAT] " + player.getName() +
-                " expulsado por demasiadas violaciones. Tipo: " + reason);
+                " expulsado. Tipo: " + reason);
 
         Bukkit.getOnlinePlayers().stream()
                 .filter(p -> p.hasPermission("advancedpaintbattle.admin"))
@@ -204,11 +196,6 @@ public class AntiCheatListener implements Listener {
         plugin.getAdminLogger().log("ANTICHEAT expulso a " + player.getName() + " por: " + reason);
     }
 
-    public void clearViolations(UUID uuid) {
-        violations.remove(uuid);
-    }
-
-    public int getViolations(UUID uuid) {
-        return violations.getOrDefault(uuid, 0);
-    }
+    public void clearViolations(UUID uuid) { violations.remove(uuid); }
+    public int getViolations(UUID uuid) { return violations.getOrDefault(uuid, 0); }
 }
