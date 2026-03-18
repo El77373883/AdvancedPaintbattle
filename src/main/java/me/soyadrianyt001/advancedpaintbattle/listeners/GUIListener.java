@@ -29,23 +29,25 @@ public class GUIListener implements Listener {
         ItemStack item = e.getCurrentItem();
         if (item == null || item.getType().isAir()) return;
 
-        if (title.contains("AdvancedPaintBattle") && !title.contains("Vota")) {
+        // Menu principal
+        if (title.equals("§6§lAdvancedPaintBattle")) {
             e.setCancelled(true);
-            handleMainGUI(player, item, title);
+            handleMainGUI(player, item);
+            return;
         }
 
-        if (title.contains("Paleta de Colores")) {
+        // Paleta de colores
+        if (title.equals("§6§lPaleta de Colores")) {
             e.setCancelled(true);
             String arenaName = plugin.getGameManager().getPlayerArena(player.getUniqueId());
             if (arenaName == null) return;
-            GameSession session = plugin.getGameManager().getSession(arenaName);
-            if (session == null) return;
-            GamePlayer gp = session.getGamePlayer(player.getUniqueId());
-            if (gp != null) player.getInventory().setItem(0, new ItemStack(item.getType()));
+            player.getInventory().setItem(0, new ItemStack(item.getType()));
             player.closeInventory();
+            return;
         }
 
-        if (title.contains("¡Vota por el mejor!")) {
+        // Votacion
+        if (title.equals("§6§l¡Vota por el mejor!")) {
             e.setCancelled(true);
             if (item.getType() != Material.PLAYER_HEAD) return;
             SkullMeta meta = (SkullMeta) item.getItemMeta();
@@ -54,44 +56,174 @@ public class GUIListener implements Listener {
             String arenaName = plugin.getGameManager().getPlayerArena(player.getUniqueId());
             if (arenaName != null) plugin.getGameManager().vote(player, targetUuid, arenaName);
             player.closeInventory();
+            return;
         }
 
-        if (title.contains("Tienda de Pinceles")) {
+        // Tienda
+        if (title.equals("§6§lTienda de Pinceles")) {
             e.setCancelled(true);
-            handleShop(player, item);
+            handleShopGUI(player, item);
+            return;
+        }
+
+        // Galeria
+        if (title.equals("§6§l🖼 Galería de Dibujos")) {
+            e.setCancelled(true);
+            if (item.getType() == Material.PLAYER_HEAD) {
+                player.sendMessage("§a§l✔ §eDiste like a este dibujo!");
+            }
+            if (item.getType() == Material.BARRIER) player.closeInventory();
+            return;
+        }
+
+        // Amigos
+        if (title.equals("§b§l👥 Amigos")) {
+            e.setCancelled(true);
+            if (e.isRightClick() && item.getType() == Material.PLAYER_HEAD) {
+                player.sendMessage("§c§l✗ §eAmigo eliminado.");
+            }
+            if (item.getType() == Material.LIME_DYE) {
+                player.closeInventory();
+                player.sendMessage("§7Usa §e/apb friend add <jugador> §7para agregar amigos.");
+            }
+            if (item.getType() == Material.BARRIER) player.closeInventory();
+            return;
+        }
+
+        // Torneo
+        if (title.equals("§6§l🏆 Torneo")) {
+            e.setCancelled(true);
+            if (item.getType() == Material.LIME_WOOL) {
+                player.closeInventory();
+                player.performCommand("apb join");
+            }
+            if (item.getType() == Material.COMMAND_BLOCK &&
+                    player.hasPermission("advancedpaintbattle.admin")) {
+                plugin.getTournamentManager().startTournament();
+                plugin.getAdminLogger().log(player, "Inicio torneo manualmente");
+            }
+            if (item.getType() == Material.REDSTONE_BLOCK &&
+                    player.hasPermission("advancedpaintbattle.admin")) {
+                plugin.getTournamentManager().endTournament();
+                plugin.getAdminLogger().log(player, "Termino torneo manualmente");
+            }
+            if (item.getType() == Material.BARRIER) player.closeInventory();
+            return;
+        }
+
+        // Pase de batalla
+        if (title.equals("§d§l🎫 Pase de Batalla")) {
+            e.setCancelled(true);
+            if (item.getType() == Material.BARRIER) player.closeInventory();
+            return;
+        }
+
+        // Logros
+        if (title.equals("§d§lLogros")) {
+            e.setCancelled(true);
+            if (item.getType() == Material.BARRIER) player.closeInventory();
+            return;
+        }
+
+        // Misiones
+        if (title.equals("§d§lMisiones Diarias")) {
+            e.setCancelled(true);
+            if (item.getType() == Material.BARRIER) player.closeInventory();
+            return;
+        }
+
+        // Perfil
+        if (title.startsWith("§b§l👤 Perfil de")) {
+            e.setCancelled(true);
+            if (item.getType() == Material.LIME_DYE) {
+                String targetName = title.replace("§b§l👤 Perfil de ", "");
+                Player target = org.bukkit.Bukkit.getPlayer(targetName);
+                if (target != null) {
+                    plugin.getFriendManager().sendRequest(player, target);
+                    player.closeInventory();
+                }
+            }
+            if (item.getType() == Material.BLAZE_POWDER) {
+                player.closeInventory();
+                player.sendMessage("§e§l⚔ §7Reto 1v1 enviado!");
+            }
+            if (item.getType() == Material.BARRIER) player.closeInventory();
+            return;
+        }
+
+        // Seleccion de modo
+        if (title.equals("§6§lSeleccionar Modo")) {
+            e.setCancelled(true);
+            handleGameModeGUI(player, item);
+            return;
+        }
+
+        // Stats
+        if (title.startsWith("§b§l👤 Perfil")) {
+            e.setCancelled(true);
+            if (item.getType() == Material.BARRIER) player.closeInventory();
         }
     }
 
-    private void handleMainGUI(Player player, ItemStack item, String title) {
-        if (item.getType() == Material.LIME_WOOL) {
-            player.closeInventory();
-            player.performCommand("apb join");
-        } else if (item.getType() == Material.DIAMOND_SWORD) {
-            player.closeInventory();
-            GUIManager.openStatsGUI(plugin, player);
-        } else if (item.getType() == Material.GOLD_INGOT) {
-            player.closeInventory();
-            GUIManager.openShopGUI(plugin, player);
-        } else if (item.getType() == Material.BOOK) {
-            player.closeInventory();
-            GUIManager.openAchievementsGUI(plugin, player);
-        } else if (item.getType() == Material.NETHER_STAR) {
-            player.closeInventory();
-            player.performCommand("apb top");
-        } else if (item.getType() == Material.BARRIER) {
-            player.closeInventory();
+    private void handleMainGUI(Player player, ItemStack item) {
+        player.closeInventory();
+        switch (item.getType()) {
+            case LIME_WOOL -> player.performCommand("apb join");
+            case DIAMOND_SWORD -> GUIManager.openStatsGUI(plugin, player);
+            case GOLD_INGOT -> GUIManager.openShopGUI(plugin, player);
+            case SHIELD -> GUIManager.openTournamentGUI(plugin, player);
+            case BOOK -> GUIManager.openAchievementsGUI(plugin, player);
+            case NETHER_STAR -> player.performCommand("apb top");
+            case PAINTING -> GUIManager.openGalleryGUI(plugin, player);
+            case HEART_OF_THE_SEA -> GUIManager.openFriendGUI(plugin, player);
+            case TOTEM_OF_UNDYING -> GUIManager.openBattlePassGUI(plugin, player);
+            case CLOCK -> GUIManager.openMissionsGUI(plugin, player);
+            case BARRIER -> {}
+            default -> {}
         }
     }
 
-    private void handleShop(Player player, ItemStack item) {
+    private void handleShopGUI(Player player, ItemStack item) {
         int cost = 0;
-        String brush = "";
-        if (item.getType() == Material.BLAZE_ROD) { cost = 500; brush = "BIG_5x5"; }
-        else if (item.getType() == Material.GLOWSTONE_DUST) { cost = 300; brush = "PARTICLES"; }
-        else if (item.getType() == Material.NETHER_STAR) { cost = 1000; brush = "STAR"; }
-        else if (item.getType() == Material.ENDER_EYE) { cost = 750; brush = "MAGIC"; }
-        if (!brush.isEmpty() && plugin.getCoinManager().removeCoins(player, cost)) {
-            player.sendMessage("§a¡Compraste el pincel §e" + brush + "§a!");
+        String brushName = "";
+        switch (item.getType()) {
+            case BLAZE_ROD -> { cost = 500; brushName = "Pincel Gigante 5x5"; }
+            case GLOWSTONE_DUST -> { cost = 300; brushName = "Particulas al Pintar"; }
+            case NETHER_STAR -> { cost = 1000; brushName = "Pincel de Estrellas"; }
+            case ENDER_EYE -> { cost = 750; brushName = "Pincel Magico"; }
+            case FIRE_CHARGE -> { cost = 600; brushName = "Pincel de Fuego"; }
+            case SNOWBALL -> { cost = 400; brushName = "Pincel de Hielo"; }
+            case SLIME_BALL -> { cost = 250; brushName = "Pincel Slime"; }
+            case BARRIER -> { player.closeInventory(); return; }
+            default -> { return; }
+        }
+        if (cost > 0) {
+            if (plugin.getCoinManager().removeCoins(player, cost)) {
+                player.sendMessage("§a§l✔ §eCompraste: §f" + brushName + "§e!");
+                player.sendMessage("§7Usa el pincel desde tu inventario en la partida.");
+                plugin.getAdminLogger().log("Compra: " + player.getName() + " compro " + brushName);
+            } else {
+                plugin.getMessageManager().send(player, "no-coins");
+            }
+        }
+    }
+
+    private void handleGameModeGUI(Player player, ItemStack item) {
+        player.closeInventory();
+        String mode = switch (item.getType()) {
+            case PAINTING -> "NORMAL";
+            case ENDER_EYE -> "BLIND";
+            case LIGHTNING_ROD -> "CHAOS";
+            case FIREWORK_ROCKET -> "RAPIDFIRE";
+            case LIME_WOOL -> "COLLAB";
+            case IRON_SWORD -> "BATTLE";
+            case SHIELD -> "TEAM";
+            case BARRIER -> null;
+            default -> null;
+        };
+        if (mode != null) {
+            player.sendMessage("§a§l✔ §eModo §f" + mode + " §eseleccionado!");
+            player.performCommand("apb join");
         }
     }
 }
