@@ -32,17 +32,27 @@ public class EffectUtil {
     public static void spawnWinFireworks(Player player) {
         for (int i = 0; i < 5; i++) {
             final int fi = i;
-            Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("AdvancedPaintBattle"), () -> {
-                Firework fw = player.getWorld().spawn(player.getLocation().add(Math.random() * 4 - 2, 0, Math.random() * 4 - 2), Firework.class);
-                FireworkMeta meta = fw.getFireworkMeta();
-                meta.addEffect(FireworkEffect.builder()
-                        .withColor(Color.YELLOW, Color.GOLD, Color.ORANGE)
-                        .withFade(Color.WHITE)
-                        .with(FireworkEffect.Type.STAR)
-                        .trail(true).flicker(true).build());
-                meta.setPower(1);
-                fw.setFireworkMeta(meta);
-            }, fi * 10L);
+            Bukkit.getScheduler().runTaskLater(
+                Bukkit.getPluginManager().getPlugin("AdvancedPaintBattle"), () -> {
+                    Firework fw = player.getWorld().spawn(
+                        player.getLocation().add(
+                            Math.random() * 4 - 2, 0, Math.random() * 4 - 2
+                        ), Firework.class);
+                    FireworkMeta meta = fw.getFireworkMeta();
+                    meta.addEffect(FireworkEffect.builder()
+                            .withColor(
+                                Color.fromRGB(255, 215, 0),
+                                Color.fromRGB(255, 165, 0),
+                                Color.fromRGB(255, 255, 0)
+                            )
+                            .withFade(Color.WHITE)
+                            .with(FireworkEffect.Type.STAR)
+                            .trail(true)
+                            .flicker(true)
+                            .build());
+                    meta.setPower(1);
+                    fw.setFireworkMeta(meta);
+                }, fi * 10L);
         }
     }
 
