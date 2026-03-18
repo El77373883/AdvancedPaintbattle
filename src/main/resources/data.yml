@@ -1,0 +1,11 @@
+# AdvancedPaintBattle - Datos Globales
+server:
+  totalGames: 0
+  totalPlayers: 0
+  startDate: 0
+
+season:
+  current: 1
+  startDate: 0
+
+halloffame: {}
