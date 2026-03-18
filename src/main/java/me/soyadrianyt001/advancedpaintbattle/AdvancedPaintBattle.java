@@ -3,6 +3,7 @@ package me.soyadrianyt001.advancedpaintbattle;
 import me.soyadrianyt001.advancedpaintbattle.commands.APBCommand;
 import me.soyadrianyt001.advancedpaintbattle.listeners.*;
 import me.soyadrianyt001.advancedpaintbattle.managers.*;
+import me.soyadrianyt001.advancedpaintbattle.modes.ModeManager;
 import me.soyadrianyt001.advancedpaintbattle.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,6 +32,7 @@ public class AdvancedPaintBattle extends JavaPlugin {
     private AnnouncementManager announcementManager;
     private EventManager eventManager;
     private DiscordManager discordManager;
+    private ModeManager modeManager;
 
     // UTILS
     private FileUtil fileUtil;
@@ -73,29 +75,19 @@ public class AdvancedPaintBattle extends JavaPlugin {
     }
 
     private void loadManagers() {
-        // Utils primero
         this.fileUtil = new FileUtil(this);
-
-        // Config y datos base
         this.configManager = new ConfigManager(this);
         this.databaseManager = new DatabaseManager(this);
         this.messageManager = new MessageManager(this);
-
-        // Datos de jugadores
         this.playerDataManager = new PlayerDataManager(this);
         this.dataManager = new DataManager(this);
-
-        // Stats y economia
         this.statsManager = new StatsManager(this);
         this.coinManager = new CoinManager(this);
         this.rankManager = new RankManager(this);
         this.achievementManager = new AchievementManager(this);
-
-        // Juego
         this.arenaManager = new ArenaManager(this);
+        this.modeManager = new ModeManager(this);
         this.gameManager = new GameManager(this);
-
-        // Extra
         this.tournamentManager = new TournamentManager(this);
         this.missionManager = new MissionManager(this);
         this.battlePassManager = new BattlePassManager(this);
@@ -113,7 +105,7 @@ public class AdvancedPaintBattle extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PaintListener(this), this);
         Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);
         Bukkit.getPluginManager().registerEvents(new AntiCheatListener(this), this);
-        new ChatUtil(this); // Se registra solo internamente
+        new ChatUtil(this);
     }
 
     private void registerCommands() {
@@ -161,6 +153,7 @@ public class AdvancedPaintBattle extends JavaPlugin {
     public AnnouncementManager getAnnouncementManager() { return announcementManager; }
     public EventManager getEventManager() { return eventManager; }
     public DiscordManager getDiscordManager() { return discordManager; }
+    public ModeManager getModeManager() { return modeManager; }
     public FileUtil getFileUtil() { return fileUtil; }
     public UpdateChecker getUpdateChecker() { return updateChecker; }
 }
