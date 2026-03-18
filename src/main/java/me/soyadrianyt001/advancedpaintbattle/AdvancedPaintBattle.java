@@ -17,6 +17,7 @@ public class AdvancedPaintBattle extends JavaPlugin {
     private DataManager dataManager;
     private PlayerDataManager playerDataManager;
     private DatabaseManager databaseManager;
+    private MySQLManager mySQLManager;
     private MessageManager messageManager;
     private ArenaManager arenaManager;
     private GameManager gameManager;
@@ -37,6 +38,7 @@ public class AdvancedPaintBattle extends JavaPlugin {
     // UTILS
     private FileUtil fileUtil;
     private UpdateChecker updateChecker;
+    private BungeeCordHook bungeeCordHook;
 
     @Override
     public void onEnable() {
@@ -63,6 +65,7 @@ public class AdvancedPaintBattle extends JavaPlugin {
         if (gameManager != null) gameManager.stopAllGames();
         if (dataManager != null) dataManager.saveAll();
         if (databaseManager != null) databaseManager.close();
+        if (mySQLManager != null) mySQLManager.close();
         getLogger().info("[APB] AdvancedPaintBattle deshabilitado. Datos guardados.");
     }
 
@@ -78,6 +81,7 @@ public class AdvancedPaintBattle extends JavaPlugin {
         this.fileUtil = new FileUtil(this);
         this.configManager = new ConfigManager(this);
         this.databaseManager = new DatabaseManager(this);
+        this.mySQLManager = new MySQLManager(this);
         this.messageManager = new MessageManager(this);
         this.playerDataManager = new PlayerDataManager(this);
         this.dataManager = new DataManager(this);
@@ -124,10 +128,11 @@ public class AdvancedPaintBattle extends JavaPlugin {
             getLogger().info("[APB] Vault conectado.");
         }
         if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
-            getLogger().info("[APB] WorldGuard detectado.");
+            WorldGuardHook.setup();
+            getLogger().info("[APB] WorldGuard conectado.");
         }
         if (getConfig().getBoolean("bungeecord.enabled", false)) {
-            getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+            this.bungeeCordHook = new BungeeCordHook(this);
             getLogger().info("[APB] BungeeCord conectado.");
         }
     }
@@ -138,6 +143,7 @@ public class AdvancedPaintBattle extends JavaPlugin {
     public DataManager getDataManager() { return dataManager; }
     public PlayerDataManager getPlayerDataManager() { return playerDataManager; }
     public DatabaseManager getDatabaseManager() { return databaseManager; }
+    public MySQLManager getMySQLManager() { return mySQLManager; }
     public MessageManager getMessageManager() { return messageManager; }
     public ArenaManager getArenaManager() { return arenaManager; }
     public GameManager getGameManager() { return gameManager; }
@@ -156,4 +162,5 @@ public class AdvancedPaintBattle extends JavaPlugin {
     public ModeManager getModeManager() { return modeManager; }
     public FileUtil getFileUtil() { return fileUtil; }
     public UpdateChecker getUpdateChecker() { return updateChecker; }
+    public BungeeCordHook getBungeeCordHook() { return bungeeCordHook; }
 }
