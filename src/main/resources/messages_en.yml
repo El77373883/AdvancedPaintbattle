@@ -1,0 +1,36 @@
+prefix: "§8[§6§lAdvanced§e§lPaint§6§lBattle§8] §r"
+
+welcome: |
+  §6§l╔══════════════════════════════════╗
+  §6§l║  §e§lAdvancedPaintBattle §6§lv1.0.0   §6§l║
+  §6§l║  §7Welcome, §b%player%§7!             §6§l║
+  §6§l║  §7Use §e/apb help §7to get started  §6§l║
+  §6§l╚══════════════════════════════════╝
+
+join: "§a§l► §eJoined §6%arena% §8(§e%players%§8/§e%max%§8)"
+leave: "§c§l◄ §eLeft §6%arena%"
+start-countdown: "§6§l⏳ §eGame starts in §c%time% §eseconds§6!"
+game-start: "§a§l¡¡THE GAME STARTS!!"
+theme-announce: "§6§l✦ §e§lTHEME: §f§l%theme% §6§l✦"
+time-warning: "§c§l⚠ §eOnly §c%time% §eseconds left!"
+paint-end: "§c§l✗ §eTime is up! Now §6vote§e."
+vote-start: "§6§l🗳 §eYou have §c%time%s §eto vote"
+voted: "§a§l✔ §eVoted for §b%player% §8(+§e%points%§8pts)"
+already-voted: "§c§l✗ §cYou already voted."
+game-end: "§6§l★ §eGAME OVER! Check the podium..."
+not-in-game: "§c§l✗ §cYou are not in any game."
+already-in-game: "§c§l✗ §cYou are already in a game."
+arena-full: "§c§l✗ §cArena is full."
+no-permission: "§c§l✗ §cNo permission."
+winner-broadcast: "§6§l★★★ §e%player% §6won with §e%points% §6points§l! §6§l★★★"
+update-available: |
+  §6§l╔══════════════════════════════════╗
+  §6§l║  §c§l⚠ UPDATE AVAILABLE          §6§l║
+  §6§l║  §7Current: §cv%current%          §6§l║
+  §6§l║  §7New:     §av%new%              §6§l║
+  §6§l║  §7Download the new version      §6§l║
+  §6§l╚══════════════════════════════════╝
+rank-up: "§6§l⬆ §eRank up to §6%rank%§e!"
+achievement-unlocked: "§d§l🏆 §eAchievement: §d%achievement%"
+coins-received: "§e§l+ §6%coins% §ecoins"
+no-coins: "§c§l✗ §cNot enough coins."
